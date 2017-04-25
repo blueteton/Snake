@@ -1,0 +1,21 @@
+﻿Build started 4/25/2017 11:59:51 AM.
+     1>Project "C:\Users\17wac01\Documents\GitHub\Snake\SnakeGame\SnakeGame.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\SFML-2.4.2\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\SnakeGame.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\SFML-2.4.2\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\SnakeGame.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Snake.cpp SnakeGame.cpp
+         SnakeGame.cpp
+     1>c:\users\17wac01\documents\github\snake\snakegame\snakegame.cpp(36): warning C4018: '<' : signed/unsigned mismatch
+         Snake.cpp
+     1>c:\users\17wac01\documents\github\snake\snakegame\snake.cpp(23): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\17wac01\Documents\GitHub\Snake\Debug\SnakeGame.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\SFML-2.4.2\lib" "sfml-graphics-d.lib" "sfml-window-d.lib" "sfml-system-d.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\17wac01\Documents\GitHub\Snake\Debug\SnakeGame.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\17wac01\Documents\GitHub\Snake\Debug\SnakeGame.lib" /MACHINE:X86 Debug\Snake.obj
+         Debug\SnakeGame.obj
+         Debug\stdafx.obj
+         SnakeGame.vcxproj -> C:\Users\17wac01\Documents\GitHub\Snake\Debug\SnakeGame.exe
+     1>Done Building Project "C:\Users\17wac01\Documents\GitHub\Snake\SnakeGame\SnakeGame.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.05
