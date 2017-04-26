@@ -9,7 +9,7 @@ Snake::Snake()
 	setFillColor(sf::Color::White);
 	setPosition(sf::Vector2f(500,500));
 	updateOrigin();
-	setVelocities(.01, .01);
+	setVelocities(.1, 0);
 }
 
 

@@ -11,15 +11,15 @@ using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	sf::RenderWindow window(sf::VideoMode(1000, 1000), "Snake!");
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 10;
+	sf::RenderWindow window(sf::VideoMode(1000, 1000), "Snake!", sf::Style::Default, settings);
 	vector <Snake> snakes;
 	Snake s;
 	for (int i = 0; i < 10; i++)
 	{
-		snakes.push_back(s.increaseLength());
-		//snakes.at(i).setVelocities(s.getvX(), s.getvY());
-		snakes.at(i).updateOrigin();
-		snakes.at(i).setPosition(sf::Vector2f(s.getPosition().x - 10, s.getPosition().y - 10));
+		snakes.push_back(Snake());
+		snakes.at(i).setPosition(sf::Vector2f(s.getPosition().x - 20*i, s.getPosition().y));
 	}
 	while (window.isOpen())
 	{
@@ -30,11 +30,10 @@ int _tmain(int argc, _TCHAR* argv[])
 				window.close();
 		}
 	
-		s.move();
 		window.clear();
-		window.draw(s);
 		for (int i = 0; i < snakes.size(); i++)
 		{
+			snakes.at(i).move();
 			window.draw(snakes.at(i));
 		}
 		window.display();
