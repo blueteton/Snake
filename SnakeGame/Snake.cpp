@@ -9,7 +9,6 @@ Snake::Snake()
 	setFillColor(sf::Color::White);
 	setPosition(sf::Vector2f(500,500));
 	updateOrigin();
-	setVelocities(.1, 0);
 }
 
 
@@ -35,14 +34,6 @@ void Snake::updateOrigin()
 {
 	setOrigin(sf::Vector2f(getLocalBounds().width / 2, getLocalBounds().height / 2));
 }
-
-
-Snake Snake::increaseLength()
-{
-	Snake snake;
-	return snake;
-}
-
 
 double Snake::getvX()
 {
