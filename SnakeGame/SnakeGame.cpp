@@ -3,32 +3,31 @@
 
 #include "stdafx.h"
 #include "Snake.h"
-#include"Food.h"
+#include "Food.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
-#include <Windows.h>
 
 using namespace std;
 
-void changeDirection(double, double, vector <Snake>*, vector <Food>*);
+void changeDirection(double, double, sf::RenderWindow*, vector <Snake>*, vector <Food>*);
 void drawObjects(sf::RenderWindow*, vector <Snake>*, vector <Food>*);
 bool snakeCollision(vector <Snake>*);
 
+
 int _tmain(int argc, _TCHAR* argv[])
 {
-	sf::RenderWindow window(sf::VideoMode(1000, 1000), "Snake!");
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 10;
+	sf::RenderWindow window(sf::VideoMode(1000, 1000), "Snake!", sf::Style::Default, settings);
 	window.setFramerateLimit(240);
-
 	vector <Snake> snakes;
 	vector <Food> food;
 	Snake s;
-
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 30; i++)
 	{
 		snakes.push_back(Snake());
-		snakes.at(i).setPosition(sf::Vector2f(s.getPosition().x - 21 *i, s.getPosition().y));
-		snakes.at(i).setVelocities(1, 0);
+		snakes.at(i).setPosition(sf::Vector2f(s.getPosition().x - 30*i, s.getPosition().y));
 	}
 
 	food.push_back(Food(rand()%1000, rand()%1000));
@@ -36,7 +35,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	while (window.isOpen())
 	{
 		sf::Event event;
-
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
@@ -46,20 +44,31 @@ int _tmain(int argc, _TCHAR* argv[])
 		if (event.type == sf::Event::KeyReleased)
 		{
 			if (event.key.code == sf::Keyboard::Up)
-				changeDirection(0, -1, &snakes, &food);
+				changeDirection(0, -1, &window, &snakes, &food);
 
 			if (event.key.code == sf::Keyboard::Down)
-				changeDirection(0, 1, &snakes, &food);
+				changeDirection(0, 1, &window, &snakes, &food);
 
 			if (event.key.code == sf::Keyboard::Left)
-				changeDirection(-1, 0, &snakes, &food);
+				changeDirection(-1, 0, &window, &snakes, &food);
 
 			if (event.key.code == sf::Keyboard::Right)
-				changeDirection(1, 0, &snakes, &food);
+				changeDirection(1, 0, &window, &snakes, &food);
+		}
+
+		if (snakeCollision(&snakes))
+		{
+			window.clear();
+			break;
 		}
 
 		window.clear();
+
+		for (int i = 0; i < snakes.size(); i++)
+			snakes.at(i).move();
+
 		drawObjects(&window, &snakes, &food);
+
 		window.display();
 	}
 	return 0;
@@ -90,9 +99,12 @@ void changeDirection(double vX, double vY, sf::RenderWindow *window, vector <Sna
 		for (int j = 0; j < s->size(); j++)
 			s->at(j).move();
 
+		if (snakeCollision(s))
+			cout << "true" << endl;
+
 		drawObjects(window, s, f);
 
-		window->display();
+		window->display(); 
 	}
 }
 
@@ -101,9 +113,10 @@ bool snakeCollision(vector <Snake> *s)
 {
 	for (int i = 1; i < s->size(); i++)
 	{
-		//if (s->at(0.get )
+		if (s->at(0).getGlobalBounds().intersects(s->at(i).getGlobalBounds()))
+			return true;
 	}
-	return true;
+	return false;
 }
 
 

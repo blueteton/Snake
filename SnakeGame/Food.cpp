@@ -1,13 +1,10 @@
 #include "stdafx.h"
 #include "Food.h"
-
+#include <SFML\Graphics.hpp>
 
 Food::Food(int x, int y)
 {
-	setSize(sf::Vector2f(10, 10));
-	updateOrigin();
-	setFillColor(sf::Color::Red);
-	setPosition(sf::Vector2f(x,y));
+
 }
 
 

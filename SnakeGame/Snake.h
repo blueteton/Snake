@@ -10,7 +10,9 @@ public:
 	~Snake();
 	double vX;
 	double vY;
+	//vector <Snake> snakes;
 	void updateOrigin();
+	Snake increaseLength();
 	void move();
 	double getvX();
 	double getvY();
