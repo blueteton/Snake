@@ -7,30 +7,32 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
+#include <ctime>
 
 using namespace std;
 
-void changeDirection(double, double, sf::RenderWindow*, vector <Snake>*, vector <Food>*);
-void drawObjects(sf::RenderWindow*, vector <Snake>*, vector <Food>*);
+void changeDirection(double, double, sf::RenderWindow*, vector <Snake>*, Food*);
+void drawObjects(sf::RenderWindow*, vector <Snake>*, Food*);
 bool snakeCollision(vector <Snake>*);
-
+bool snakeFoodCollision(vector <Snake>*, Food*);
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 10;
-	sf::RenderWindow window(sf::VideoMode(1000, 1000), "Snake!", sf::Style::Default, settings);
+	sf::RenderWindow window(sf::VideoMode(1000, 1000), "Snake!", sf::Style::Default, settings); // creation of the widnow
 	window.setFramerateLimit(240);
+	
+	srand(time(NULL));
 	vector <Snake> snakes;
-	vector <Food> food;
-	Snake s;
-	for (int i = 0; i < 30; i++)
+	Food food(rand() % 1000, rand() % 1000); // ranomly places food on screen
+
+	snakes.push_back(Snake());
+	for (int i = 1; i < 3; i++)
 	{
 		snakes.push_back(Snake());
-		snakes.at(i).setPosition(sf::Vector2f(s.getPosition().x - 30*i, s.getPosition().y));
+		snakes.at(i).setPosition(sf::Vector2f(snakes.at(0).getPosition().x - 20 * i, snakes.at(0).getPosition().y));
 	}
-
-	food.push_back(Food(rand()%1000, rand()%1000));
 
 	while (window.isOpen())
 	{
@@ -41,7 +43,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				window.close();
 		}
 
-		if (event.type == sf::Event::KeyReleased)
+		if (event.type == sf::Event::KeyReleased) // detects if a key was released
 		{
 			if (event.key.code == sf::Keyboard::Up)
 				changeDirection(0, -1, &window, &snakes, &food);
@@ -57,9 +59,23 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 
 		if (snakeCollision(&snakes))
+			window.close();
+
+		if (snakeFoodCollision(&snakes, &food))
 		{
-			window.clear();
-			break;
+			food.setPosition(sf::Vector2f(rand() % 1000, rand() % 1000)); //set a new random postion of food
+			snakes.push_back(Snake()); // adds a new snake to the vector
+
+			if (snakes.at(snakes.size() - 2).getvX() == -1 || snakes.at(snakes.size() - 2).getvX() == 1)  //finds the direction of the snake
+				snakes.at(snakes.size() - 1).setPosition(sf::Vector2f(snakes.at(snakes.size() - 2).getPosition().x - 20 * //sets the new added snakes position 
+				snakes.at(snakes.size() - 2).getvX(), snakes.at(snakes.size() - 2).getPosition().y));
+
+			if (snakes.at(snakes.size() - 2).getvY() == -1 || snakes.at(snakes.size() - 2).getvY() == 1)
+				snakes.at(snakes.size() - 1).setPosition(sf::Vector2f(snakes.at(snakes.size() - 2).getPosition().x, //sets the new added snakes position
+				snakes.at(snakes.size() - 2).getPosition().y - 20 * snakes.at(snakes.size() - 2).getvY()));
+
+			snakes.at(snakes.size() - 1).setVelocities(snakes.at(snakes.size() - 2).getvX(), snakes.at(snakes.size() - 2).getvY()); //sets the new added snakes velocity 
+																																	//of the snake before it
 		}
 
 		window.clear();
@@ -75,7 +91,9 @@ int _tmain(int argc, _TCHAR* argv[])
 }
 
 
-void changeDirection(double vX, double vY, sf::RenderWindow *window, vector <Snake> *s, vector <Food> *f)
+//changes the direction of the snake so that the rest of it follows
+//preconditions: double x velocity,  double y velocity, renderWidnow pointer, vector Snake pointer, and Food pointer
+void changeDirection(double vX, double vY, sf::RenderWindow *window, vector <Snake> *s, Food *f)
 {
 	int x = s->at(0).getPosition().x;
 	int y = s->at(0).getPosition().y;
@@ -100,7 +118,7 @@ void changeDirection(double vX, double vY, sf::RenderWindow *window, vector <Sna
 			s->at(j).move();
 
 		if (snakeCollision(s))
-			cout << "true" << endl;
+			window->close();
 
 		drawObjects(window, s, f);
 
@@ -109,22 +127,41 @@ void changeDirection(double vX, double vY, sf::RenderWindow *window, vector <Sna
 }
 
 
+//detects if the snake has collided with itself
+//precondition: vector Snake pointer
 bool snakeCollision(vector <Snake> *s)
 {
-	for (int i = 1; i < s->size(); i++)
+	for (int i = 2; i < s->size(); i++)
 	{
 		if (s->at(0).getGlobalBounds().intersects(s->at(i).getGlobalBounds()))
 			return true;
 	}
+
+	if (s->at(0).getPosition().x == 0 || s->at(0).getPosition().x == 1000)
+		return true;
+	else if (s->at(0).getPosition().y == 0 || s->at(0).getPosition().y == 1000)
+		return true;
+
 	return false;
 }
 
 
-void drawObjects(sf::RenderWindow *window, vector <Snake> *s, vector <Food> *f)
+//detects collision of the snake and food
+//precoditions: vector Snake pointer, Food pointer
+bool snakeFoodCollision(vector <Snake> *s, Food *f)
+{
+	if (s->at(0).getGlobalBounds().intersects(f->getGlobalBounds()))
+		return true;
+
+	return false;
+}
+
+
+//draws all objects on the screen
+//preconditions: RenderWindow pointer, vector Snake pointer, Food pointer
+void drawObjects(sf::RenderWindow *window, vector <Snake> *s, Food *f)
 {
 	for (int i = 0; i < s->size(); i++)
 		window->draw(s->at(i));
-
-	for (int i = 0; i < f->size(); i++)
-		window->draw(f->at(i));
+	window->draw(*f);
 }

@@ -6,6 +6,7 @@ class Food : public sf::RectangleShape
 public:
 	Food(int, int);
 	~Food();
+private:
 	void updateOrigin();
 };
 
